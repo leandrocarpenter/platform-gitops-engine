@@ -42,7 +42,7 @@ spec:
             debug: {}
           extensions:
             health_check:
-              endpoint: ${env:MY_POD_IP}:13133
+              endpoint: {}
           processors:
             batch: {}
             memory_limiter:
