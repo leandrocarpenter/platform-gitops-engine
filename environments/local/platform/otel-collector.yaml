@@ -68,13 +68,6 @@ spec:
           service:
             extensions:
               - health_check
-            metrics:
-              readers:
-                - pull:
-                    exporter:
-                      prometheus:
-                        host: ${env:MY_POD_IP}
-                        port: 8888
             pipelines:
               logs:
                 exporters:
