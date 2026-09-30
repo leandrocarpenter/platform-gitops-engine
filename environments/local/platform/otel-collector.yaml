@@ -84,6 +84,7 @@ spec:
                   - batch
                 receivers:
                   - otlp
+                  - prometheus
               traces:
                 exporters:
                   - debug
