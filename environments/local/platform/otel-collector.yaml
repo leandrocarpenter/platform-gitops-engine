@@ -1,10 +1,3 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: opentelemetry-collector
-  namespace: argocd
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   source:
@@ -27,19 +20,30 @@ spec:
 
         presets:
           logsCollection:
-            enabled: false
+            enabled: true
           hostMetrics:
             enabled: false
           kubernetesAttributes:
             enabled: false
           kubeletMetrics:
-            enabled: false
+            enabled: true
           clusterMetrics:
             enabled: false
+
+        extraEnvs:
+          - name: NEW_RELIC_LICENSE_KEY
+            valueFrom:
+              secretKeyRef:
+                name: newrelic-secret
+                key: license-key
 
         alternateConfig:
           exporters:
             debug: {}
+            otlphttp:
+              endpoint: https://otlp.nr-data.net
+              headers:
+                api-key: ${env:NEW_RELIC_LICENSE_KEY}
           extensions:
             health_check:
               endpoint: ${env:MY_POD_IP}:13133
@@ -68,18 +72,18 @@ spec:
           service:
             extensions:
               - health_check
-            telemetry:
-              metrics:
-                readers:
-                  - pull:
-                      exporter:
-                        prometheus:
-                          host: ${env:MY_POD_IP}
-                          port: 8888
+            metrics:
+              readers:
+                - pull:
+                    exporter:
+                      prometheus:
+                        host: ${env:MY_POD_IP}
+                        port: 8888
             pipelines:
               logs:
                 exporters:
                   - debug
+                  - otlphttp
                 processors:
                   - memory_limiter
                   - batch
@@ -88,6 +92,7 @@ spec:
               metrics:
                 exporters:
                   - debug
+                  - otlphttp
                 processors:
                   - memory_limiter
                   - batch
@@ -97,6 +102,7 @@ spec:
               traces:
                 exporters:
                   - debug
+                  - otlphttp
                 processors:
                   - memory_limiter
                   - batch
