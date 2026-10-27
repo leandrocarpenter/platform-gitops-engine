@@ -20,13 +20,13 @@ spec:
 
         presets:
           logsCollection:
-            enabled: false
+            enabled: true
           hostMetrics:
             enabled: false
           kubernetesAttributes:
             enabled: false
           kubeletMetrics:
-            enabled: false
+            enabled: true
           clusterMetrics:
             enabled: false
 
