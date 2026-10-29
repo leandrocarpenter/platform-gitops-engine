@@ -79,8 +79,8 @@ spec:
           service:
             extensions:
               - health_check
-            metrics:
-              telemetry:
+            telemetry:
+              readers:
                 - pull:
                     exporter:
                       prometheus:
