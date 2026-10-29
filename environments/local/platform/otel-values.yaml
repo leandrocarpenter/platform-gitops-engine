@@ -66,12 +66,13 @@ alternateConfig:
     extensions:
       - health_check
     telemetry:
-      readers:
-        - pull:
-            exporter:
-              prometheus:
-                host: ${env:MY_POD_IP}
-                port: 8888
+      metrics:
+        readers:
+          - pull:
+              exporter:
+                prometheus:
+                  host: ${env:MY_POD_IP}
+                  port: 8888
     pipelines:
       logs:
         exporters:
